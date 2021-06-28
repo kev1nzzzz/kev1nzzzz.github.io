@@ -1173,6 +1173,7 @@ pre .javascript .function {
   margin: 0 auto;
   max-width: 120px;
   padding: 2px;
+  border-radius: 50%;
 }
 .site-author-name {
   color: var(--text-color);
@@ -1200,7 +1201,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #2e403e;
+  background: #a4a41d;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1526,7 +1527,10 @@ pre .javascript .function {
   position: fixed;
   transition-property: bottom;
   z-index: 1300;
-  width: initial;
+  width: 24px;
+}
+.back-to-top span {
+  display: none;
 }
 .back-to-top:hover {
   color: #fc6423;
@@ -2691,4 +2695,73 @@ ul.breadcrumb li + li:last-child {
   .pagination {
     margin: 8px 0 0;
   }
+}
+.back-to-top {
+  right: 60px;
+  width: 70px;
+  height: 900px;
+  top: -900px;
+  left: 350px;
+  bottom: unset;
+  transition: all 0.5s ease-in-out;
+  background: url("/images/scroll.png");
+}
+.back-to-top > i {
+  display: none;
+}
+.back-to-top.back-to-top-on {
+  bottom: unset;
+  top: calc(100vh - 900px - 200px);
+}
+.sidebar {
+  box-shadow: none;
+}
+.wobbleTransparentBK {
+  background-color: rgba(0,0,0,0) !important;
+}
+.wobbleTransparentLine {
+  border-color: rgba(0,0,0,0) !important;
+}
+#header,
+#footer {
+  background-color: #f5f5f5;
+}
+#sidebar,
+header {
+  z-index: 1 !important;
+}
+.main {
+  padding-bottom: 200px;
+}
+.post {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.site-author-image {
+  max-width: 110px;
+}
+body::before {
+  background-image: url("/images/kobe-bgc.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+  content: " ";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -2;
+}
+.content {
+  opacity: 0.9;
+}
+.sidebar-inner {
+  opacity: 0.9 !important;
+}
+.header-inner {
+  opacity: 0.9;
 }

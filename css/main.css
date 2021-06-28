@@ -1201,7 +1201,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #e8bdff;
+  background: #e47974;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2793,5 +2793,5 @@ body::before {
 }
 .post-title-link {
   font-family: 'Zhi Mang Xing' !important;
-  font-size: 1.2rem !important;
+  font-size: 1.8rem !important;
 }

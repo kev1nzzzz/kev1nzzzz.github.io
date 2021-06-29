@@ -23,147 +23,147 @@
 <h2 id="git配置相关"><a href="#git配置相关" class="headerlink" title="git配置相关"></a>git配置相关</h2><ol>
 <li><strong>配置用户名和邮箱：</strong></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;your name&quot;</span><br><span class="line">git config --global user.email &quot;youremail@github.com&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.name</span> <span class="string">&quot;your name&quot;</span></span><br><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.email</span> <span class="string">&quot;youremail@github.com&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>&emsp;</p>
 <h2 id="工作区上的操作命令"><a href="#工作区上的操作命令" class="headerlink" title="工作区上的操作命令"></a>工作区上的操作命令</h2><h3 id="·-新建仓库"><a href="#·-新建仓库" class="headerlink" title="· 新建仓库"></a><strong>· 新建仓库</strong></h3><ol>
 <li><p>将工作区中的项目文件使用git进行管理，即创建一个新的本地仓库：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">init</span></span><br></pre></td></tr></table></figure></li>
 <li><p>从远程git仓库复制项目，克隆项目时如果想定义新的项目名，可以在指令后面指定：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git://github.com/wasd/example.git mygit</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git clone git:<span class="regexp">//gi</span>thub.com<span class="regexp">/wasd/</span>example.git mygit</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-提交"><a href="#·-提交" class="headerlink" title="· 提交"></a><strong>· 提交</strong></h3><ol>
 <li><p>提交工作区所有文件到暂存区</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> .</span><br></pre></td></tr></table></figure></li>
 <li><p>提交指定文件到暂存区</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add &lt;file1&gt; &lt;file2&gt; ...</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">add</span> <span class="symbol">&lt;file1&gt;</span> <span class="symbol">&lt;file2&gt;</span> ...</span><br></pre></td></tr></table></figure></li>
 <li><p>提交工作区中某个文件夹中所有文件到暂存区</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add [dir]</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> [dir]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-撤销"><a href="#·-撤销" class="headerlink" title="· 撤销"></a><strong>· 撤销</strong></h3><ol>
 <li><p>删除工作区文件，并从暂存区删除对应文件的记录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rm &lt;file1&gt; &lt;file2&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> rm &lt;file<span class="number">1</span>&gt; &lt;file<span class="number">2</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>从暂存区删除文件，但是工作区依然还有该文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;file&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">rm</span> --cached &lt;<span class="keyword">file</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>取消暂存区已经暂存的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset HEAD &lt;file&gt;...</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">git <span class="meta">reset</span> HEAD &lt;<span class="meta">file</span>&gt;...</span><br></pre></td></tr></table></figure></li>
 <li><p>撤销上一次对文件的操作</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout --&lt;file&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git checkout <span class="comment">--&lt;file&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>​    <em>要确定上一次对文件的修改不再需要，如果想保留上一次的修改以备以后继续工作，可以使用stashing和分支来处理</em></p>
 </li>
 </ol>
 <h3 id="·-更新文件"><a href="#·-更新文件" class="headerlink" title="· 更新文件"></a><strong>· 更新文件</strong></h3><ol>
 <li><p>重命名文件，并将已改名文件提交到暂存区</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git mv [file-original] [file-renamed]</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git mv [<span class="built_in">file</span>-original] [<span class="built_in">file</span>-renamed]</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-查询状态"><a href="#·-查询状态" class="headerlink" title="· 查询状态"></a><strong>· 查询状态</strong></h3><ol>
 <li><p>查询当前工作区所有文件的状态</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git status</span></span><br></pre></td></tr></table></figure></li>
 <li><p>比较工作区中当前文件和暂存区之间的差异，也就是修改之后还没有暂存的内容(也可以指定文件)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git diff &lt;file-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>&emsp;</p>
 <h2 id="暂存区上的操作命令"><a href="#暂存区上的操作命令" class="headerlink" title="暂存区上的操作命令"></a>暂存区上的操作命令</h2><h3 id="·-提交文件到版本库"><a href="#·-提交文件到版本库" class="headerlink" title="· 提交文件到版本库"></a><strong>· 提交文件到版本库</strong></h3><ol>
 <li><p>将暂存区中的文件提交到本地仓库，打上新版本</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &quot;commit_info&quot;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> commit -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>将所有已经使用git管理过的文件暂存后一并提交，跳过add到暂存区的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -a -m &quot;commit_info&quot;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">git commit -<span class="keyword">a</span> -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>提交文件时，发现漏掉几个文件，或者注释写错了，可以撤销上一次提交</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-查看信息"><a href="#·-查看信息" class="headerlink" title="· 查看信息"></a><strong>· 查看信息</strong></h3><ol>
 <li><p>比较暂存区与上一版本的差异</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git diff &lt;file-name&gt; --cached</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt; <span class="comment">--cached</span></span><br></pre></td></tr></table></figure></li>
 <li><p>查看提交历史，参数-p展开每次提交的历史差异，用-2显示最近的两次更新</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log -p -2</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p -<span class="number">2</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-打标签"><a href="#·-打标签" class="headerlink" title="· 打标签"></a><strong>· 打标签</strong></h3><p>​            有两种类型：<strong>轻量级的（lightweight）和含附注的（annotated）</strong>。轻量级标签就像是个不会变化的分支，实际上它就是个指向    特定提交对象的引用。而含附注标签，实际上是存储在仓库中的一个独立对象，它有自身的校验和信息，包含着标签的名字，电子邮件    地址和日期，以及标签说明，标签本身也允许使用 GNU Privacy Guard (GPG) 来签署或验证。一般建议使用含附注型的标签，以便保    留相关信息；当然，如果只是临时性加注标签，或者不需要旁注额外信息，用轻量级标签也行。</p>
 <ol>
 <li><p>列出现在所有的标签</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span></span><br></pre></td></tr></table></figure></li>
 <li><p>使用特定的搜索模式列出符合条件的标签，例如只对1.4.2系列的版本感兴趣</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l &quot;v1.4.2.*&quot;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-l</span> <span class="string">&quot;v1.4.2.*&quot;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>创建一个含附注类型的标签，需要加<code>-a</code>参数</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -a v1.4 -m &quot;my version 1.4&quot;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-a</span> v1.<span class="number">4</span> -m <span class="string">&quot;my version 1.4&quot;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>使用git show命令查看相应标签的版本信息，并连同显示打标签时的提交对象</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git show v1.4</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> show v<span class="number">1</span>.<span class="number">4</span></span><br></pre></td></tr></table></figure></li>
 <li><p>创建一个轻量级标签的话，就直接使用git tag命令即可，连<code>-a</code>,<code>-s</code>以及<code>-m</code>选项都不需要，直接给出标签名字即可</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag v1.5</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">v1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
 <li><p>将标签推送到远程仓库中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push origin v1.5</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> push origin v<span class="number">1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
 <li><p>将本地所有的标签全部推送到远程仓库中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push origin --tags</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> --tags</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="·-分支管理"><a href="#·-分支管理" class="headerlink" title="· 分支管理"></a><strong>· 分支管理</strong></h3><ol>
 <li><p>创建分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>从当前所处的分支切换到其他分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>新建并切换到新建分支上</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>删除分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch -d &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch -d &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>将当前分支与指定分支进行合并</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git merge &lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>显示本地仓库的所有分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch</span></span><br></pre></td></tr></table></figure></li>
 <li><p>查看各个分支最后一个提交对象的信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch -v</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch -v</span></span><br></pre></td></tr></table></figure></li>
 <li><p>查看哪些分支已经合并到当前分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch --merged</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git branch <span class="comment">--merged</span></span><br></pre></td></tr></table></figure></li>
 <li><p>查看当前哪些分支还没有合并到当前分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git branch --no-merged</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> branch --<span class="literal">no</span>-merged</span><br></pre></td></tr></table></figure></li>
 <li><p>把远程分支合并到当前分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git merge &lt;remote-name&gt;/&lt;branch-name&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;remote-<span class="keyword">name</span>&gt;/&lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure>
 
 <p>​        <em>如果是单线的历史分支不存在任何需要解决的分歧，只是简单的将HEAD指针前移，所以这种合并过程可以称为快进（Fast forward），而如果是历史分支是分叉的，会以当前分叉的两个分支作为两个祖先，创建新的提交对象；如果在合并分支时，遇到合并冲突需要人工解决后，再才能提交；</em><em><strong>(不是特别理解这段话的意思)</strong></em></p>
 </li>
 <li><p>在远程分支的基础上创建新的本地分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-name&gt; &lt;remote-name&gt;/&lt;branch-name&gt;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt; &lt;remote-<span class="built_in">name</span>&gt;/&lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
 <li><p>从远程分支checkout出来的本地分支，称之为跟踪分支。在跟踪分支上向远程分支上推送内容, 该命令会自动判断应该向远程仓库中的哪个分支推送数据.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">push</span></span><br></pre></td></tr></table></figure>
 
 <p>在跟踪分支上合并远程分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git pull</span></span><br></pre></td></tr></table></figure></li>
 <li><p>关于rebase的操作目前还不太理解，先不写在里面啦~</p>
 </li>
 </ol>
 <p>&emsp;</p>
 <h2 id="本地仓库上的操作"><a href="#本地仓库上的操作" class="headerlink" title="本地仓库上的操作"></a>本地仓库上的操作</h2><ol>
 <li><p>查看本地仓库关联的远程仓库</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote</span><br></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git remote</span></span><br></pre></td></tr></table></figure>
 
 <p><em>在克隆完每个远程仓库后，远程仓库默认为 orign，加上<code>-v</code>的参数后，会显示远程仓库的<code>url</code>地址；</em></p>
 </li>
 <li><p>添加远程仓库，一般会取一个简短的别名</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add example git://github.com/example/example.git</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git remote add example git:<span class="regexp">//gi</span>thub.com<span class="regexp">/example/</span>example.git</span><br></pre></td></tr></table></figure></li>
 <li><p>从远程仓库中抓取本地仓库中没有的更新</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git fetch [remote-name]</span><br></pre></td></tr></table></figure>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">fetch</span> [remote-<span class="type">name</span>]</span><br></pre></td></tr></table></figure>
 
 <p><em>使用fetch只是将远端数据拉到本地仓库，并不自动合并到当前工作分支，只能人工合并。如果设置了某个分支关联到远程仓库的某个分支的话，可以使用<code>git pull</code>来拉去远程分支的数据，然后将远端分支自动合并到本地仓库中的当前分支；</em></p>
 </li>
 <li><p>将本地仓库某分支推送到远程仓库上</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push [remote-name] [branch-name]</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git push [remote-<span class="built_in">name</span>] [branch-<span class="built_in">name</span>]</span><br></pre></td></tr></table></figure>
 
 <p>如果想将本地分支推送到远程仓库的不同名分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push &lt;remote-name&gt; &lt;local-branch&gt;:&lt;remote-branch&gt;</span><br><span class="line">如：</span><br><span class="line">git push origin serverfix:awesomebranch</span><br></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push &lt;remote-name&gt; &lt;local-branch&gt;<span class="symbol">:&lt;remote-branch&gt;</span></span><br><span class="line">如：</span><br><span class="line">git push origin <span class="symbol">serverfix:</span>awesomebranch</span><br></pre></td></tr></table></figure>
 
 <p>如果想删除远程分支</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push [romote-name] :&lt;remote-branch&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push [romote-name] <span class="symbol">:&lt;remote-branch&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p><em>这里省略了本地分支，也就相当于将空白内容推送给远程分支，就等于删掉了远程分支。</em></p>
 </li>
 <li><p>查看远程仓库的详细信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote show origin</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git remote <span class="built_in">show</span> <span class="built_in">origin</span></span><br></pre></td></tr></table></figure></li>
 <li><p>修改某个远程仓库在本地的简称</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rename [old-name] [new-name]</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git remote <span class="keyword">rename</span> [<span class="built_in">old</span>-<span class="type">name</span>] [<span class="built_in">new</span>-<span class="type">name</span>]</span><br></pre></td></tr></table></figure></li>
 <li><p>移除远程仓库</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm [remote-name]</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> remote rm<span class="meta"> [remote-name]</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>&emsp;</p>
 <h2 id="忽略文件-gitignore"><a href="#忽略文件-gitignore" class="headerlink" title="忽略文件.gitignore"></a>忽略文件.gitignore</h2><p>​        一般会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。可以创建一个名为 .gitignore 的文件，列出要忽略的文件模式。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 此为注释 – 将被 Git 忽略</span><br><span class="line"># 忽略所有 .a 结尾的文件</span><br><span class="line">*.a</span><br><span class="line"># 但 lib.a 除外</span><br><span class="line">!lib.a</span><br><span class="line"># 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO</span><br><span class="line">/TODO</span><br><span class="line"># 忽略 build/ 目录下的所有文件</span><br><span class="line">build/</span><br><span class="line"># 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt</span><br><span class="line">doc/*.txt</span><br><span class="line"># 忽略 doc/ 目录下所有扩展名为 txt 的文件</span><br><span class="line">doc/**/*.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 此为注释 – 将被 Git 忽略</span></span><br><span class="line"><span class="comment"># 忽略所有 .a 结尾的文件</span></span><br><span class="line">*<span class="string">.a</span></span><br><span class="line"><span class="comment"># 但 lib.a 除外</span></span><br><span class="line">!lib.a</span><br><span class="line"><span class="comment"># 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO</span></span><br><span class="line"><span class="string">/TODO</span></span><br><span class="line"><span class="comment"># 忽略 build/ 目录下的所有文件</span></span><br><span class="line">build/</span><br><span class="line"><span class="comment"># 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt</span></span><br><span class="line">doc/*<span class="string">.txt</span></span><br><span class="line"><span class="comment"># 忽略 doc/ 目录下所有扩展名为 txt 的文件</span></span><br><span class="line">doc/**/*<span class="string">.txt</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>

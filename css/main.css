@@ -1201,7 +1201,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #febdd2;
+  background: #115004;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2772,7 +2772,7 @@ body::before {
 }
 .sidebar {
   border-radius: 40px;
-  margin-top: 380px !important;
+  margin-top: 490px !important;
 }
 .site-title {
   font-size: 2.8rem;
@@ -2878,7 +2878,6 @@ body::before {
   color: #ffc0cb;
 }
 .main-menu {
-  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   position: relative;

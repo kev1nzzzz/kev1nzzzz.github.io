@@ -4,10 +4,11 @@
     <title>git常用指令</title>
     <url>/2021/06/28/git/</url>
     <content><![CDATA[<p>主要是记录git工作流程和归纳一下日常常用的git操作命令，防止遗忘。</p>
+<span id="more"></span>
+
 <p>git主要涉及到以下四个关键点：</p>
 <p>&emsp;&emsp;<strong>工作区</strong>：本地电脑存放项目文件的地方；</p>
 <p>&emsp;&emsp;<strong>暂存区（Index/Stage）</strong>：在使用git管理项目文件的时候，其本地的项目文件会多出一个.git的文件夹，将这个.git文件夹称之为版                                                    本库。其中.git文件夹中包含了两个部分，一个是暂存区（Index或者Stage）,顾名思义就是暂时存放文                                                    件的地方，通常使用add命令将工作区的文件添加到暂存区里；</p>
-<span id="more"></span>
 <p>&emsp;&emsp;<strong>本地仓库：</strong>.git文件夹里还包括git自动创建的master分支，并且将HEAD指针指向master分支。使用commit命令可以将暂存区中                          的文件添加到本地仓库中；</p>
 <p>&emsp;&emsp;<strong>远程仓库：</strong>不是在本地仓库中，项目代码在远程git服务器上，比如项目放在github上，就是一个远程仓库，通常使用clone命令将                          远程仓库拷贝到本地仓库中，开发后推送到远程仓库中即可；</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/4/25/162fcc0e7e711dc7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="git几个核心区域间的关系"></p>

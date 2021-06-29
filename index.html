@@ -198,6 +198,7 @@
       <meta itemprop="name" content="KevinのBlog">
     </span>
       <header class="post-header">
+      
         <h2 class="post-title" itemprop="name headline">
           
             <a href="/2021/06/28/git/" class="post-title-link" itemprop="url">git常用指令</a>
@@ -211,7 +212,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-06-28 16:37:01 / 修改时间：17:52:04" itemprop="dateCreated datePublished" datetime="2021-06-28T16:37:01+08:00">2021-06-28</time>
+              <time title="创建时间：2021-06-28 16:37:01 / 修改时间：23:25:54" itemprop="dateCreated datePublished" datetime="2021-06-28T16:37:01+08:00">2021-06-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -231,13 +232,11 @@
     
     
     
+
     <div class="post-body" itemprop="articleBody">
 
       
           <p>主要是记录git工作流程和归纳一下日常常用的git操作命令，防止遗忘。</p>
-<p>git主要涉及到以下四个关键点：</p>
-<p>&emsp;&emsp;<strong>工作区</strong>：本地电脑存放项目文件的地方；</p>
-<p>&emsp;&emsp;<strong>暂存区（Index/Stage）</strong>：在使用git管理项目文件的时候，其本地的项目文件会多出一个.git的文件夹，将这个.git文件夹称之为版                                                    本库。其中.git文件夹中包含了两个部分，一个是暂存区（Index或者Stage）,顾名思义就是暂时存放文                                                    件的地方，通常使用add命令将工作区的文件添加到暂存区里；</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/06/28/git/#more" rel="contents">
@@ -386,6 +385,45 @@
   <span class="author" itemprop="copyrightHolder">Kevin&33</span>
 </div>
 
+<span id="sitetime" style=""></span>
+<script language=javascript>
+	function siteTime(){
+		window.setTimeout("siteTime()", 1000);
+		var seconds = 1000;
+		var minutes = seconds * 60;
+		var hours = minutes * 60;
+		var days = hours * 24;
+		var years = days * 365;
+		var today = new Date();
+		var todayYear = today.getFullYear();
+		var todayMonth = today.getMonth()+1;
+		var todayDate = today.getDate();
+		var todayHour = today.getHours();
+		var todayMinute = today.getMinutes();
+		var todaySecond = today.getSeconds();
+		/* 
+		Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+		year - 作为date对象的年份，为4位年份值
+		month - 0-11之间的整数，做为date对象的月份
+		day - 1-31之间的整数，做为date对象的天数
+		hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+		minutes - 0-59之间的整数，做为date对象的分钟数
+		seconds - 0-59之间的整数，做为date对象的秒数
+		microseconds - 0-999之间的整数，做为date对象的毫秒数
+        */
+		var t1 = Date.UTC(2020,06,13,15,00,00); //北京时间2018-2-13 00:00:00
+		var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+		var diff = t2-t1;
+		var diffYears = Math.floor(diff/years);
+		var diffDays = Math.floor((diff/days)-diffYears*365);
+		var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+		var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+		var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+		document.getElementById("sitetime").innerHTML="小破站已运行"+/*diffYears+" 年 "+*/diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+	}
+	siteTime();
+</script>
+
         
 
 
@@ -452,6 +490,9 @@
 
 
 <script src="/js/sakura.js"><\/script>
+
+<script src="/js/funny-title.js"><\/script>
+<script src="/js/cursor.js"><\/script>
 
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>

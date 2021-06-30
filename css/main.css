@@ -1201,7 +1201,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff6722;
+  background: #ffa174;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2832,4 +2832,11 @@ body::before {
   left: 7px;
   font-size: 1.5rem;
   font-family: 'Zhi Mang Xing';
+}
+.post-meta {
+  font-family: 'ZCOOL QingKe HuangYou';
+  font-size: 18px !important;
+}
+.collection-header {
+  font-size: 40px;
 }

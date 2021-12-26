@@ -230,7 +230,7 @@
       
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/JS%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/JS%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/" class="post-title-link" itemprop="url">JS概念知识</a>
         </h2>
 
         <div class="post-meta">
@@ -240,7 +240,23 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-12-26 19:28:55" itemprop="dateCreated datePublished" datetime="2021-12-26T19:28:55+08:00">2021-12-26</time>
+              <time title="创建时间：2021-11-05 20:06:40" itemprop="dateCreated datePublished" datetime="2021-11-05T20:06:40+08:00">2021-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-26 19:35:44" itemprop="dateModified" datetime="2021-12-26T19:35:44+08:00">2021-12-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
             </span>
 
           
@@ -256,147 +272,14 @@
 
       
           <p>主要记录一下JS中一些基本但是不太容易理解的概念知识。</p>
-<h4 id="·-调用栈与执行上下文"><a href="#·-调用栈与执行上下文" class="headerlink" title="· 调用栈与执行上下文"></a>· 调用栈与执行上下文</h4><p>当一段JS代码被执行，JS引擎先会进行编译，并且创建执行上下文。有以下三种情况可以被算作是“一段代码”。</p>
-<ol>
-<li>当 JavaScript 执行全局代码的时候，会编译全局代码并创建全局执行上下文，而且在整个页面的生存周期内，全局执行上下文只有一份。</li>
-<li>当调用一个函数的时候，函数体内的代码会被编译，并创建函数执行上下文，一般情况下，函数执行结束之后，创建的函数执行上下文会被销毁。</li>
-<li>当使用 eval 函数的时候，eval 的代码也会被编译，并创建执行上下文。</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> b = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">return</span> a+b;</span><br><span class="line">&#125;;</span><br><span class="line">add()</span><br></pre></td></tr></table></figure>
-
-<p>引擎首先会创建全局执行上下文，包含声明的变量和函数。</p>
-<img src="https://static001.geekbang.org/resource/image/7f/da/7fa2ed18e702861890d767ea547533da.png" alt="组件层级示例" style="zoom:50%;" />
-
-<p>之后当执行到add()时，JS判断出是函数调用，会：</p>
-<ol>
-<li>首先，从全局执行上下文中，取出 add 函数代码。</li>
-<li>其次，对 add 函数的这段代码进行编译，并创建该函数的执行上下文和可执行代码。</li>
-<li>最后，执行代码，输出结果。</li>
-</ol>
-<p><strong>执行上下文中包括哪些？</strong></p>
-<ol>
-<li><strong>变量环境：</strong></li>
-</ol>
-<p>首先简单说明一下变量提升的概念。</p>
-<p>当我们声明了一个变量或者函数时，我们可以把他看做是声明+赋值两部分组成；</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myname = <span class="string">&#x27;1111&#x27;</span></span><br><span class="line"><span class="comment">// 等同于：</span></span><br><span class="line"><span class="keyword">var</span> myname；<span class="comment">// 声明</span></span><br><span class="line">myname = <span class="string">&#x27;1111&#x27;</span>  <span class="comment">// 赋值</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;foo&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;bar&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第一个函数 foo 是一个完整的函数声明，也就是说没有涉及到赋值操作；第二个函数是先声明变量 bar，再把function()&#123;console.log(&#x27;bar&#x27;)&#125;赋值给 bar。</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>总结：</strong>变量提升，是指在 JavaScript 代码执行过程中，JavaScript 引擎把变量的声明部分和函数的声明部分提升到代码开头的“行为”。变量被提升后，会给变量设置默认值，这个默认值就是我们熟悉的 undefined。</p>
-<p>变量提升是在编译阶段被JS引擎放入内存。具体如下图：</p>
-<img src="https://static001.geekbang.org/resource/image/06/13/0655d18ec347a95dfbf843969a921a13.png" alt="组件层级示例" style="zoom: 67%;" />
-
-
-
-<p>如上图，输入一段代码，经过编译后，会生成两部分内容：执行上下文（Execution context）和可执行代码。而通过var声明的变量和函数会被放到变量环境中。</p>
-<p><strong>注意：</strong></p>
-<ol>
-<li><p>如果是同名的函数，JavaScript编译阶段会选择最后声明的那个。</p>
-</li>
-<li><p> 如果变量和函数同名，那么在编译阶段，变量的声明会被忽略。即函数提升要比变量提升的优先级要高一些，且不会被变量声明覆盖，但是会被变量赋值之后覆盖。</p>
-</li>
-</ol>
-<ol start="2">
-<li><strong>词法环境：</strong></li>
-</ol>
-<p>ES6引入let,const使得JS也拥有了块级作用域。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">let</span> b = <span class="number">3</span></span><br><span class="line">      <span class="keyword">var</span> c = <span class="number">4</span></span><br><span class="line">      <span class="keyword">let</span> d = <span class="number">5</span></span><br><span class="line">      <span class="built_in">console</span>.log(a)</span><br><span class="line">      <span class="built_in">console</span>.log(b)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(b) </span><br><span class="line">    <span class="built_in">console</span>.log(c)</span><br><span class="line">    <span class="built_in">console</span>.log(d)</span><br><span class="line">&#125;   </span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
-
-<p>在执行到代码块里面时，函数上下文如下图：</p>
-<img src="https://static001.geekbang.org/resource/image/7e/fa/7e0f7bc362e0dea21d27dc5fb08d06fa.png" alt="组件层级示例" style="zoom:50%;" />
-
-<p>其实在词法环境内部，维护了一个小型栈结构，栈底是函数最外层的变量，进入一个作用域块后，就会把该作用域块内部的变量压到栈顶；当作用域执行完成之后，该作用域的信息就会从栈顶弹出，这就是词法环境的结构。需要注意下，这里所讲的变量是指通过 let 或者 const 声明的变量。</p>
-<p>下面是变量查找的过程：</p>
-<img src="https://static001.geekbang.org/resource/image/06/08/06c06a756632acb12aa97b3be57bb908.png" alt="组件层级示例" style="zoom: 50%;" />
-
-
-
-<ol start="3">
-<li><strong>outer</strong></li>
-</ol>
-<p>在每个执行上下文的变量环境中，都包含了一个外部引用，用来指向外部的执行上下文，称为outer。在查找变量时，如果在当前的变量环境中没有查找到，那么 JavaScript 引擎会继续在 outer 所指向的执行上下文中查找。以此类推，称为作用域链。</p>
-<p>而JS执行过程中，其作用域链是由词法作用域决定的。词法作用域就是指<strong>作用域是由代码中函数声明的位置</strong>来决定的，所以词法作用域是静态的作用域。也就是说，<strong>词法作用域是代码编译阶段就决定好的，和函数是怎么调用的没有关系</strong>。</p>
-<p>通过作用域链可以更深刻的来理解闭包：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;极客时间&quot;</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> test2 = <span class="number">2</span></span><br><span class="line">    <span class="keyword">var</span> innerBar = &#123;</span><br><span class="line">        <span class="attr">getName</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(test1)</span><br><span class="line">            <span class="keyword">return</span> myName</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">setName</span>:<span class="function"><span class="keyword">function</span>(<span class="params">newName</span>)</span>&#123;</span><br><span class="line">            myName = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> innerBar</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = foo()</span><br><span class="line">bar.setName(<span class="string">&quot;极客邦&quot;</span>)</span><br><span class="line">bar.getName()</span><br><span class="line"><span class="built_in">console</span>.log(bar.getName())</span><br></pre></td></tr></table></figure>
-
-<p>当执行到foo函数内部的return innerBar这行代码时，调用栈情况如下：</p>
-<img src="https://static001.geekbang.org/resource/image/d5/ef/d5587b76427a56c5f0b0571e4264b7ef.png" alt="组件层级示例" style="zoom:50%;" />
-
-<p>根据词法作用域的规则，内部函数 getName 和 setName 总是可以访问它们的外部函数 foo 中的变量，所以当 innerBar 对象返回给全局变量 bar 时，虽然 foo 函数已经执行结束，但是 getName 和 setName 函数依然可以使用 foo 函数中的变量 myName 和 test1。所以当 foo 函数执行完成之后，其整个调用栈的状态如下图所示：</p>
-<img src="https://static001.geekbang.org/resource/image/ee/3f/ee7c1ca481875ad4bdeb4383bd1f883f.png" alt="组件层级示例" style="zoom:50%;" />
-
-
-
-<p><strong>在 JavaScript 中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包。比如外部函数是 foo，那么这些变量的集合就称为 foo 函数的闭包。</strong></p>
-<p>那这些闭包是如何使用的呢？当执行到 bar.setName 方法中的myName = “极客邦”这句代码时，JavaScript 引擎会沿着“当前执行上下文–&gt;foo 函数闭包–&gt; 全局执行上下文”的顺序来查找 myName 变量，可以参考下面的调用栈状态图：</p>
-<img src="https://static001.geekbang.org/resource/image/50/46/50e4ba60fc7e420e83b35b95e379b246.png" alt="组件层级示例" style="zoom:50%;" />
-
-
-
-<ol start="4">
-<li><strong>this</strong></li>
-</ol>
-<p>this和执行上下文是绑定的，每个执行上下文中都有一个 this。执行上下文主要分为三种——全局执行上下文、函数执行上下文和 eval 执行上下文，所以对应的 this 也只有这三种——全局执行上下文中的 this、函数中的 this 和 eval 中的 this。</p>
-<p><strong>全局执行上下文的this:</strong></p>
-<p>全局执行上下文中的 this 指向 window 对象。</p>
-<p><strong>函数执行上下文的this:</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>) <span class="comment">//window</span></span><br><span class="line">&#125;</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
-
-<p>在默认情况下调用一个函数，其执行上下文中的 this 也是指向 window 对象的。</p>
-<p>下面是三种来设置函数执行上下文的this值。</p>
-<ol>
-<li><strong>通过call,apply,bind方法设置</strong></li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> bar = &#123;</span><br><span class="line">  <span class="attr">myName</span> : <span class="string">&quot;zzz&quot;</span>,</span><br><span class="line">  <span class="attr">test1</span> : <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.myName = <span class="string">&quot;kkk&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">foo.call(bar) </span><br><span class="line"><span class="built_in">console</span>.log(bar) <span class="comment">//kkk</span></span><br><span class="line"><span class="built_in">console</span>.log(myName) <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><strong>通过对象调用方式设置</strong></li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;lol&quot;</span>, </span><br><span class="line">  <span class="attr">showThis</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">myObj.showThis() <span class="comment">//lol</span></span><br></pre></td></tr></table></figure>
-
-<p>即： <strong>使用对象来调用其内部的一个方法，该方法的 this 是指向对象本身的。</strong></p>
-<p>也可以认为是JS引擎在执行myObject.showThis()时，将其转化为了：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myObj.showThis.call(myObj)</span><br></pre></td></tr></table></figure>
-
-<p>但是如果我们把一个对象的方法赋值给一个全局对象，然后再调用该对象：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;lol&quot;</span>,</span><br><span class="line">  <span class="attr">showThis</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&quot;kkk&quot;</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>) <span class="comment">//window, 因为此时相当于在全局环境调用一个函数</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> foo = myObj.showThis</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><strong>通过构造函数方式设置this</strong></li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CreateObj</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = <span class="string">&quot;lol&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myObj = <span class="keyword">new</span> CreateObj()</span><br></pre></td></tr></table></figure>
-
-<p>当执行new Createobj()时，JS引擎做了以下几件事：</p>
-<ol>
-<li>首先创建了一个空对象 tempObj；</li>
-<li>接着调用 CreateObj.call 方法，并将 tempObj 作为 call 方法的参数，这样当 CreateObj 的执行上下文创建时，它的 this 就指向了 tempObj 对象；</li>
-<li>然后执行 CreateObj 函数，此时的 CreateObj 函数执行上下文中的 this 指向了 tempObj 对象；</li>
-<li>最后返回 tempObj 对象。</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tempObj = &#123;&#125;</span><br><span class="line">CreateObj.call(tempObj)</span><br><span class="line"><span class="keyword">return</span> tempObj</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>this的缺陷</strong></p>
-<ol>
-<li><strong>嵌套函数中的 this 不会从外层函数中继承</strong></li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;lol&quot;</span>, </span><br><span class="line">  <span class="attr">showThis</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="built_in">this</span>)&#125;</span><br><span class="line">    bar()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">myObj.showThis()</span><br></pre></td></tr></table></figure>
-
-<p>执行这段代码后，函数 bar 中的 this 指向的是全局 window 对象，而函数 showThis 中的 this 指向的是 myObj 对象。</p>
-<p>可以通过一个小技巧来解决这个问题，比如在 showThis 函数中声明一个变量 self 用来保存 this，然后在 bar 函数中使用 self，代码如下所示：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;lol&quot;</span>, </span><br><span class="line">  <span class="attr">showThis</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">    <span class="keyword">var</span> self = <span class="built_in">this</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      self.name = <span class="string">&quot;zzz&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    bar()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">myObj.showThis()</span><br><span class="line"><span class="built_in">console</span>.log(myObj.name) <span class="comment">//zzz</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name) <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
-
-<p>也可以使用<strong>箭头函数</strong>来解决该问题：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  <span class="attr">name</span> : <span class="string">&quot;lol&quot;</span>, </span><br><span class="line">  <span class="attr">showThis</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">    <span class="keyword">var</span> bar = <span class="function">()=&gt;</span>&#123;</span><br><span class="line">      <span class="built_in">this</span>.name = <span class="string">&quot;zzz&quot;</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    bar()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">myObj.showThis()</span><br><span class="line"><span class="built_in">console</span>.log(myObj.name)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name)</span><br></pre></td></tr></table></figure>
-
-<p>这是因为 ES6 中的箭头函数并不会创建其自身的执行上下文，所以箭头函数中的 this 取决于它的外部函数。</p>
-<ol start="2">
-<li><strong>普通函数中的 this 默认指向全局对象 window</strong></li>
-</ol>
-<p>这个设计也是一种缺陷，因为在实际工作中，我们并不希望函数执行上下文中的 this 默认指向全局对象，因为这样会打破数据的边界，造成一些误操作。如果要让函数执行上下文中的 this 指向某个对象，最好的方式是通过 call 方法来显示调用。</p>
-<p>可以通过设置 JavaScript 的“严格模式”来解决。在严格模式下，默认执行一个函数，其函数的执行上下文中的 this 值是 undefined，这就解决上面的问题了。</p>
-<h4 id="·-总结"><a href="#·-总结" class="headerlink" title="· 总结"></a>· 总结</h4><p>本文主要梳理了一下函数调用栈和执行上下文，以及上下文中包含的四块内容的相关知识点，此为JS的基础知识，需要深刻理解。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/JS%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -840,7 +723,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

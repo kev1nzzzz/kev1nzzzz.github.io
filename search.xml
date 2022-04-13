@@ -223,6 +223,180 @@
       </tags>
   </entry>
   <entry>
+    <title>git常用指令</title>
+    <url>/git/</url>
+    <content><![CDATA[<p>主要是记录git工作流程和归纳一下日常常用的git操作命令，防止遗忘。</p>
+<span id="more"></span>
+
+<p>git主要涉及到以下四个关键点：</p>
+<p>&emsp;&emsp;<strong>工作区</strong>：本地电脑存放项目文件的地方；</p>
+<p>&emsp;&emsp;<strong>暂存区（Index/Stage）</strong>：在使用git管理项目文件的时候，其本地的项目文件会多出一个.git的文件夹，将这个.git文件夹称之为版                                                    本库。其中.git文件夹中包含了两个部分，一个是暂存区（Index或者Stage）,顾名思义就是暂时存放文                                                    件的地方，通常使用add命令将工作区的文件添加到暂存区里；</p>
+<p>&emsp;&emsp;<strong>本地仓库：</strong>.git文件夹里还包括git自动创建的master分支，并且将HEAD指针指向master分支。使用commit命令可以将暂存区中                          的文件添加到本地仓库中；</p>
+<p>&emsp;&emsp;<strong>远程仓库：</strong>不是在本地仓库中，项目代码在远程git服务器上，比如项目放在github上，就是一个远程仓库，通常使用clone命令将                          远程仓库拷贝到本地仓库中，开发后推送到远程仓库中即可；</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/25/162fcc0e7e711dc7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="git几个核心区域间的关系"></p>
+<p>所以其实git命令可以划分为以下：</p>
+<ol>
+<li><strong>git管理配置的命令；</strong></li>
+<li><strong>工作区与暂存区的交互；</strong></li>
+<li><strong>暂存区与本地仓库（分支）上的交互；</strong></li>
+<li><strong>本地仓库与远程仓库的交互。</strong></li>
+</ol>
+<p>&emsp;</p>
+<h2 id="git配置相关"><a href="#git配置相关" class="headerlink" title="git配置相关"></a>git配置相关</h2><ol>
+<li><strong>配置用户名和邮箱：</strong></li>
+</ol>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.name</span> <span class="string">&quot;your name&quot;</span></span><br><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.email</span> <span class="string">&quot;youremail@github.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>&emsp;</p>
+<h2 id="工作区上的操作命令"><a href="#工作区上的操作命令" class="headerlink" title="工作区上的操作命令"></a>工作区上的操作命令</h2><h3 id="·-新建仓库"><a href="#·-新建仓库" class="headerlink" title="· 新建仓库"></a><strong>· 新建仓库</strong></h3><ol>
+<li><p>将工作区中的项目文件使用git进行管理，即创建一个新的本地仓库：</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">init</span></span><br></pre></td></tr></table></figure></li>
+<li><p>从远程git仓库复制项目，克隆项目时如果想定义新的项目名，可以在指令后面指定：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git clone git:<span class="regexp">//gi</span>thub.com<span class="regexp">/wasd/</span>example.git mygit</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-提交"><a href="#·-提交" class="headerlink" title="· 提交"></a><strong>· 提交</strong></h3><ol>
+<li><p>提交工作区所有文件到暂存区</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> .</span><br></pre></td></tr></table></figure></li>
+<li><p>提交指定文件到暂存区</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">add</span> <span class="symbol">&lt;file1&gt;</span> <span class="symbol">&lt;file2&gt;</span> ...</span><br></pre></td></tr></table></figure></li>
+<li><p>提交工作区中某个文件夹中所有文件到暂存区</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> [dir]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-撤销"><a href="#·-撤销" class="headerlink" title="· 撤销"></a><strong>· 撤销</strong></h3><ol>
+<li><p>删除工作区文件，并从暂存区删除对应文件的记录</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> rm &lt;file<span class="number">1</span>&gt; &lt;file<span class="number">2</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>从暂存区删除文件，但是工作区依然还有该文件</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">rm</span> --cached &lt;<span class="keyword">file</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>取消暂存区已经暂存的文件</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">git <span class="meta">reset</span> HEAD &lt;<span class="meta">file</span>&gt;...</span><br></pre></td></tr></table></figure></li>
+<li><p>撤销上一次对文件的操作</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git checkout <span class="comment">--&lt;file&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>​    <em>要确定上一次对文件的修改不再需要，如果想保留上一次的修改以备以后继续工作，可以使用stashing和分支来处理</em></p>
+</li>
+</ol>
+<h3 id="·-更新文件"><a href="#·-更新文件" class="headerlink" title="· 更新文件"></a><strong>· 更新文件</strong></h3><ol>
+<li><p>重命名文件，并将已改名文件提交到暂存区</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git mv [<span class="built_in">file</span>-original] [<span class="built_in">file</span>-renamed]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-查询状态"><a href="#·-查询状态" class="headerlink" title="· 查询状态"></a><strong>· 查询状态</strong></h3><ol>
+<li><p>查询当前工作区所有文件的状态</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git status</span></span><br></pre></td></tr></table></figure></li>
+<li><p>比较工作区中当前文件和暂存区之间的差异，也就是修改之后还没有暂存的内容(也可以指定文件)</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>&emsp;</p>
+<h2 id="暂存区上的操作命令"><a href="#暂存区上的操作命令" class="headerlink" title="暂存区上的操作命令"></a>暂存区上的操作命令</h2><h3 id="·-提交文件到版本库"><a href="#·-提交文件到版本库" class="headerlink" title="· 提交文件到版本库"></a><strong>· 提交文件到版本库</strong></h3><ol>
+<li><p>将暂存区中的文件提交到本地仓库，打上新版本</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> commit -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>将所有已经使用git管理过的文件暂存后一并提交，跳过add到暂存区的过程</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">git commit -<span class="keyword">a</span> -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>提交文件时，发现漏掉几个文件，或者注释写错了，可以撤销上一次提交</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-查看信息"><a href="#·-查看信息" class="headerlink" title="· 查看信息"></a><strong>· 查看信息</strong></h3><ol>
+<li><p>比较暂存区与上一版本的差异</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt; <span class="comment">--cached</span></span><br></pre></td></tr></table></figure></li>
+<li><p>查看提交历史，参数-p展开每次提交的历史差异，用-2显示最近的两次更新</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p -<span class="number">2</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-打标签"><a href="#·-打标签" class="headerlink" title="· 打标签"></a><strong>· 打标签</strong></h3><p>​            有两种类型：<strong>轻量级的（lightweight）和含附注的（annotated）</strong>。轻量级标签就像是个不会变化的分支，实际上它就是个指向    特定提交对象的引用。而含附注标签，实际上是存储在仓库中的一个独立对象，它有自身的校验和信息，包含着标签的名字，电子邮件    地址和日期，以及标签说明，标签本身也允许使用 GNU Privacy Guard (GPG) 来签署或验证。一般建议使用含附注型的标签，以便保    留相关信息；当然，如果只是临时性加注标签，或者不需要旁注额外信息，用轻量级标签也行。</p>
+<ol>
+<li><p>列出现在所有的标签</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span></span><br></pre></td></tr></table></figure></li>
+<li><p>使用特定的搜索模式列出符合条件的标签，例如只对1.4.2系列的版本感兴趣</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-l</span> <span class="string">&quot;v1.4.2.*&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个含附注类型的标签，需要加<code>-a</code>参数</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-a</span> v1.<span class="number">4</span> -m <span class="string">&quot;my version 1.4&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>使用git show命令查看相应标签的版本信息，并连同显示打标签时的提交对象</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> show v<span class="number">1</span>.<span class="number">4</span></span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个轻量级标签的话，就直接使用git tag命令即可，连<code>-a</code>,<code>-s</code>以及<code>-m</code>选项都不需要，直接给出标签名字即可</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">v1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
+<li><p>将标签推送到远程仓库中</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> push origin v<span class="number">1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
+<li><p>将本地所有的标签全部推送到远程仓库中</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> --tags</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="·-分支管理"><a href="#·-分支管理" class="headerlink" title="· 分支管理"></a><strong>· 分支管理</strong></h3><ol>
+<li><p>创建分支</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>从当前所处的分支切换到其他分支</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>新建并切换到新建分支上</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>删除分支</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch -d &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>将当前分支与指定分支进行合并</p>
+<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>显示本地仓库的所有分支</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch</span></span><br></pre></td></tr></table></figure></li>
+<li><p>查看各个分支最后一个提交对象的信息</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch -v</span></span><br></pre></td></tr></table></figure></li>
+<li><p>查看哪些分支已经合并到当前分支</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git branch <span class="comment">--merged</span></span><br></pre></td></tr></table></figure></li>
+<li><p>查看当前哪些分支还没有合并到当前分支</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> branch --<span class="literal">no</span>-merged</span><br></pre></td></tr></table></figure></li>
+<li><p>把远程分支合并到当前分支</p>
+<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;remote-<span class="keyword">name</span>&gt;/&lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>​        <em>如果是单线的历史分支不存在任何需要解决的分歧，只是简单的将HEAD指针前移，所以这种合并过程可以称为快进（Fast forward），而如果是历史分支是分叉的，会以当前分叉的两个分支作为两个祖先，创建新的提交对象；如果在合并分支时，遇到合并冲突需要人工解决后，再才能提交；</em><em><strong>(不是特别理解这段话的意思)</strong></em></p>
+</li>
+<li><p>在远程分支的基础上创建新的本地分支</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt; &lt;remote-<span class="built_in">name</span>&gt;/&lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>从远程分支checkout出来的本地分支，称之为跟踪分支。在跟踪分支上向远程分支上推送内容, 该命令会自动判断应该向远程仓库中的哪个分支推送数据.</p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">push</span></span><br></pre></td></tr></table></figure>
+
+<p>在跟踪分支上合并远程分支</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git pull</span></span><br></pre></td></tr></table></figure></li>
+<li><p>关于rebase的操作目前还不太理解，先不写在里面啦~</p>
+</li>
+</ol>
+<p>&emsp;</p>
+<h2 id="本地仓库上的操作"><a href="#本地仓库上的操作" class="headerlink" title="本地仓库上的操作"></a>本地仓库上的操作</h2><ol>
+<li><p>查看本地仓库关联的远程仓库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git remote</span></span><br></pre></td></tr></table></figure>
+
+<p><em>在克隆完每个远程仓库后，远程仓库默认为 orign，加上<code>-v</code>的参数后，会显示远程仓库的<code>url</code>地址；</em></p>
+</li>
+<li><p>添加远程仓库，一般会取一个简短的别名</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git remote add example git:<span class="regexp">//gi</span>thub.com<span class="regexp">/example/</span>example.git</span><br></pre></td></tr></table></figure></li>
+<li><p>从远程仓库中抓取本地仓库中没有的更新</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">fetch</span> [remote-<span class="type">name</span>]</span><br></pre></td></tr></table></figure>
+
+<p><em>使用fetch只是将远端数据拉到本地仓库，并不自动合并到当前工作分支，只能人工合并。如果设置了某个分支关联到远程仓库的某个分支的话，可以使用<code>git pull</code>来拉去远程分支的数据，然后将远端分支自动合并到本地仓库中的当前分支；</em></p>
+</li>
+<li><p>将本地仓库某分支推送到远程仓库上</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git push [remote-<span class="built_in">name</span>] [branch-<span class="built_in">name</span>]</span><br></pre></td></tr></table></figure>
+
+<p>如果想将本地分支推送到远程仓库的不同名分支</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push &lt;remote-name&gt; &lt;local-branch&gt;<span class="symbol">:&lt;remote-branch&gt;</span></span><br><span class="line">如：</span><br><span class="line">git push origin <span class="symbol">serverfix:</span>awesomebranch</span><br></pre></td></tr></table></figure>
+
+<p>如果想删除远程分支</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push [romote-name] <span class="symbol">:&lt;remote-branch&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><em>这里省略了本地分支，也就相当于将空白内容推送给远程分支，就等于删掉了远程分支。</em></p>
+</li>
+<li><p>查看远程仓库的详细信息</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git remote <span class="built_in">show</span> <span class="built_in">origin</span></span><br></pre></td></tr></table></figure></li>
+<li><p>修改某个远程仓库在本地的简称</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git remote <span class="keyword">rename</span> [<span class="built_in">old</span>-<span class="type">name</span>] [<span class="built_in">new</span>-<span class="type">name</span>]</span><br></pre></td></tr></table></figure></li>
+<li><p>移除远程仓库</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> remote rm<span class="meta"> [remote-name]</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>&emsp;</p>
+<h2 id="忽略文件-gitignore"><a href="#忽略文件-gitignore" class="headerlink" title="忽略文件.gitignore"></a>忽略文件.gitignore</h2><p>​        一般会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。可以创建一个名为 .gitignore 的文件，列出要忽略的文件模式。</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 此为注释 – 将被 Git 忽略</span></span><br><span class="line"><span class="comment"># 忽略所有 .a 结尾的文件</span></span><br><span class="line">*<span class="string">.a</span></span><br><span class="line"><span class="comment"># 但 lib.a 除外</span></span><br><span class="line">!lib.a</span><br><span class="line"><span class="comment"># 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO</span></span><br><span class="line"><span class="string">/TODO</span></span><br><span class="line"><span class="comment"># 忽略 build/ 目录下的所有文件</span></span><br><span class="line">build/</span><br><span class="line"><span class="comment"># 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt</span></span><br><span class="line">doc/*<span class="string">.txt</span></span><br><span class="line"><span class="comment"># 忽略 doc/ 目录下所有扩展名为 txt 的文件</span></span><br><span class="line">doc/**/*<span class="string">.txt</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>版本控制</category>
+      </categories>
+      <tags>
+        <tag>工具类</tag>
+        <tag>版本控制</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>React Hooks</title>
     <url>/reactHooks/</url>
     <content><![CDATA[<p>主要记录一下JS中一些基本但是不太容易理解的概念知识。</p>
@@ -606,63 +780,6 @@
       </tags>
   </entry>
   <entry>
-    <title>浏览器基本工作原理(二)</title>
-    <url>/%E4%BB%8E%E8%BE%93%E5%85%A5%20URL%20%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>本文主要从浏览器进程角度来梳理一下在浏览器里，从输入 URL 到页面展示，这中间发生的一系列事情。</p>
-<span id="more"></span>
-
-<h3 id="从输入-URL-到页面展示完整流程示意图"><a href="#从输入-URL-到页面展示完整流程示意图" class="headerlink" title="从输入 URL 到页面展示完整流程示意图"></a>从输入 URL 到页面展示完整流程示意图</h3><img src="https://static001.geekbang.org/resource/image/92/5d/92d73c75308e50d5c06ad44612bcb45d.png" alt="组件层级示例" style="zoom:50%;" />
-
-<p>这个过程可以大概描述如下：</p>
-<ol>
-<li>首先，浏览器进程接收到用户输入的 URL 请求，浏览器进程便将该 URL 转发给网络进程。</li>
-<li>然后，在网络进程中发起真正的 URL 请求。</li>
-<li>接着网络进程接收到了响应头数据，便解析响应头数据，并将数据转发给浏览器进程。</li>
-<li>浏览器进程接收到网络进程的响应头数据之后，发送<strong>“提交导航 (CommitNavigation)”消息</strong>到渲染进程；</li>
-<li>渲染进程接收到“提交导航”的消息之后，便开始准备接收 HTML 数据，接收数据的方式是直接和网络进程建立数据管道；</li>
-<li>最后渲染进程会向浏览器进程<strong>“确认提交”</strong>，这是告诉浏览器进程：“已经准备好接受和解析页面数据了”。</li>
-<li>浏览器进程接收到渲染进程“提交文档”的消息之后，便开始移除之前旧的文档，然后更新浏览器进程中的页面状态。</li>
-</ol>
-<p><strong>用户发出 URL 请求到页面开始解析的这个过程，就叫做导航。</strong></p>
-<ol>
-<li><h4 id="用户输入"><a href="#用户输入" class="headerlink" title="用户输入"></a>用户输入</h4><p>当用户在地址栏中输入一个查询关键字时，地址栏会判断输入的关键字是搜索内容，还是请求的 URL。</p>
-<p>​    <strong>·</strong> 如果是搜索内容，地址栏会使用浏览器默认的搜索引擎，来合成新的带搜索关键字的 URL。</p>
-<p>​    <strong>·</strong> 如果判断输入内容符合 URL 规则，那么地址栏会根据规则，把这段内容加上协议，合成为完整的 URL。</p>
-<p>当用户输入关键字并键入回车之后，意味着当前页面即将要被替换成新的页面，不过之前浏览器还给了当前页面一次执行<strong>beforeunload 事件</strong>的机会，beforeunload 事件允许页面在退出之前执行一些数据清理操作，还可以询问用户是否要离开当前页面，比如当前页面可能有未提交完成的表单等情况，因此用户可以通过 beforeunload 事件来取消导航，让浏览器不再执行任何后续工作。</p>
-<p>当浏览器刚开始加载一个地址之后，标签页上的图标便进入了加载状态。但此时页面显示的依然是之前打开的页面内容，并没立即替换为新请求的页面。因为<strong>需要等待提交文档阶段，页面内容才会被替换</strong>。</p>
-</li>
-<li><h4 id="URL请求过程"><a href="#URL请求过程" class="headerlink" title="URL请求过程"></a>URL请求过程</h4><p>这个在上一篇文章中有写过，主要就是浏览器进程会通过进程间通信（IPC）把 URL 请求发送至网络进程，网络进程接收到 URL 请求后，会在这里发起真正的 URL 请求流程。</p>
-<p>需要注意响应头中的Content-Type字段，比如如果 Content-Type 字段的值被浏览器判断为下载类型，<strong>那么该请求会被提交给浏览器的下载管理器，并且该 URL 请求的导航流程就此结束</strong>。但<strong>如果是 HTML，那么浏览器则会继续进行导航流程</strong>。在Chrome中，接下来就需要准备渲染进程了。</p>
-</li>
-<li><h4 id="准备渲染进程"><a href="#准备渲染进程" class="headerlink" title="准备渲染进程"></a>准备渲染进程</h4><p>默认情况下，Chrome 会为每个页面分配一个渲染进程，也就是说，每打开一个新页面就会配套创建一个新的渲染进程。但是在某些情况下，浏览器会让多个页面直接运行在同一个渲染进程中。</p>
-<p><strong>那什么情况下多个页面会同时运行在一个渲染进程中呢？</strong></p>
-<p>结论是：**如果从一个页面打开了另一个新页面，而新页面和当前页面属于同一站点的话，那么新页面会复用父页面的渲染进程( process-per-site-instance)**。</p>
-<p><strong>同一站点：</strong> <strong>根域名</strong>（例如，geekbang.org）加上<strong>协议</strong>（例如，https:// 或者 http://），还包含了该根域名下的所有子域名和不同的端口。</p>
-<p>如果新页面和当前页面不属于同一站点，浏览器会使用一个新的渲染进程。</p>
-<p>渲染进程准备好之后，还不能立即进入文档解析状态，因为此时的文档数据还在网络进程中，并没有提交给渲染进程，所以下一步就进入了提交文档阶段。</p>
-</li>
-<li><h4 id="提交文档"><a href="#提交文档" class="headerlink" title="提交文档"></a>提交文档</h4><p>提交文档是指浏览器进程将网络进程接收到的 HTML 数据提交给渲染进程。具体流程大概如下：</p>
-<p><strong>·</strong> 首先当浏览器进程接收到网络进程的响应头数据之后，便<strong>向渲染进程发起“提交文档”的消息</strong>；</p>
-<p><strong>·</strong> 渲染进程接收到“提交文档”的消息后，会和网络进程建立传输数据的“管道”;</p>
-<p><strong>·</strong> 等文档数据传输完成之后，渲染进程会返回“<strong>确认提交</strong>”的消息给浏览器进程；</p>
-<p><strong>·</strong> 浏览器进程在收到“确认提交”的消息后，会更新浏览器界面状态，包括了安全状态、地址栏的 URL、前进后退的历史状态，并更新           Web 页面。</p>
-<p>当渲染进程<strong>确认提交</strong>之后，更新的页面如下：</p>
-<img src="https://static001.geekbang.org/resource/image/d3/b8/d3c5a6188b09b5b57af439005ae7dfb8.png" alt="组件层级示例" style="zoom:50%;" /></li>
-</ol>
-<p>所以在浏览器的地址栏里面输入了一个地址后，之前的页面没有立马消失，而是要加载一会儿才会更新页面。</p>
-<ol start="5">
-<li><h4 id="渲染阶段"><a href="#渲染阶段" class="headerlink" title="渲染阶段"></a>渲染阶段</h4></li>
-</ol>
-<p>一旦文档被提交，渲染进程便开始页面解析和子资源加载，<strong>具体渲染流程比较复杂，之后再来进行总结</strong>。一旦页面生成完毕，渲染进程会发送一个消息给浏览器进程，浏览器接收到消息后，会停止标签图标上的加载动画。</p>
-]]></content>
-      <categories>
-        <category>浏览器</category>
-      </categories>
-      <tags>
-        <tag>浏览器基本原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>浏览器基本工作原理(一)</title>
     <url>/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</url>
     <content><![CDATA[<p>本文主要记录一下最近重温的网络传输和浏览器的一些基本工作原理以及工作流程等知识。主要参考了李兵老师的《浏览器工作原理与实践》。本文只介绍到响应数据返回给浏览器之前的工作流程，之后的工作在下一篇文章。</p>
@@ -769,6 +886,63 @@
       <tags>
         <tag>浏览器基本原理</tag>
         <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浏览器基本工作原理(二)</title>
+    <url>/%E4%BB%8E%E8%BE%93%E5%85%A5%20URL%20%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>本文主要从浏览器进程角度来梳理一下在浏览器里，从输入 URL 到页面展示，这中间发生的一系列事情。</p>
+<span id="more"></span>
+
+<h3 id="从输入-URL-到页面展示完整流程示意图"><a href="#从输入-URL-到页面展示完整流程示意图" class="headerlink" title="从输入 URL 到页面展示完整流程示意图"></a>从输入 URL 到页面展示完整流程示意图</h3><img src="https://static001.geekbang.org/resource/image/92/5d/92d73c75308e50d5c06ad44612bcb45d.png" alt="组件层级示例" style="zoom:50%;" />
+
+<p>这个过程可以大概描述如下：</p>
+<ol>
+<li>首先，浏览器进程接收到用户输入的 URL 请求，浏览器进程便将该 URL 转发给网络进程。</li>
+<li>然后，在网络进程中发起真正的 URL 请求。</li>
+<li>接着网络进程接收到了响应头数据，便解析响应头数据，并将数据转发给浏览器进程。</li>
+<li>浏览器进程接收到网络进程的响应头数据之后，发送<strong>“提交导航 (CommitNavigation)”消息</strong>到渲染进程；</li>
+<li>渲染进程接收到“提交导航”的消息之后，便开始准备接收 HTML 数据，接收数据的方式是直接和网络进程建立数据管道；</li>
+<li>最后渲染进程会向浏览器进程<strong>“确认提交”</strong>，这是告诉浏览器进程：“已经准备好接受和解析页面数据了”。</li>
+<li>浏览器进程接收到渲染进程“提交文档”的消息之后，便开始移除之前旧的文档，然后更新浏览器进程中的页面状态。</li>
+</ol>
+<p><strong>用户发出 URL 请求到页面开始解析的这个过程，就叫做导航。</strong></p>
+<ol>
+<li><h4 id="用户输入"><a href="#用户输入" class="headerlink" title="用户输入"></a>用户输入</h4><p>当用户在地址栏中输入一个查询关键字时，地址栏会判断输入的关键字是搜索内容，还是请求的 URL。</p>
+<p>​    <strong>·</strong> 如果是搜索内容，地址栏会使用浏览器默认的搜索引擎，来合成新的带搜索关键字的 URL。</p>
+<p>​    <strong>·</strong> 如果判断输入内容符合 URL 规则，那么地址栏会根据规则，把这段内容加上协议，合成为完整的 URL。</p>
+<p>当用户输入关键字并键入回车之后，意味着当前页面即将要被替换成新的页面，不过之前浏览器还给了当前页面一次执行<strong>beforeunload 事件</strong>的机会，beforeunload 事件允许页面在退出之前执行一些数据清理操作，还可以询问用户是否要离开当前页面，比如当前页面可能有未提交完成的表单等情况，因此用户可以通过 beforeunload 事件来取消导航，让浏览器不再执行任何后续工作。</p>
+<p>当浏览器刚开始加载一个地址之后，标签页上的图标便进入了加载状态。但此时页面显示的依然是之前打开的页面内容，并没立即替换为新请求的页面。因为<strong>需要等待提交文档阶段，页面内容才会被替换</strong>。</p>
+</li>
+<li><h4 id="URL请求过程"><a href="#URL请求过程" class="headerlink" title="URL请求过程"></a>URL请求过程</h4><p>这个在上一篇文章中有写过，主要就是浏览器进程会通过进程间通信（IPC）把 URL 请求发送至网络进程，网络进程接收到 URL 请求后，会在这里发起真正的 URL 请求流程。</p>
+<p>需要注意响应头中的Content-Type字段，比如如果 Content-Type 字段的值被浏览器判断为下载类型，<strong>那么该请求会被提交给浏览器的下载管理器，并且该 URL 请求的导航流程就此结束</strong>。但<strong>如果是 HTML，那么浏览器则会继续进行导航流程</strong>。在Chrome中，接下来就需要准备渲染进程了。</p>
+</li>
+<li><h4 id="准备渲染进程"><a href="#准备渲染进程" class="headerlink" title="准备渲染进程"></a>准备渲染进程</h4><p>默认情况下，Chrome 会为每个页面分配一个渲染进程，也就是说，每打开一个新页面就会配套创建一个新的渲染进程。但是在某些情况下，浏览器会让多个页面直接运行在同一个渲染进程中。</p>
+<p><strong>那什么情况下多个页面会同时运行在一个渲染进程中呢？</strong></p>
+<p>结论是：**如果从一个页面打开了另一个新页面，而新页面和当前页面属于同一站点的话，那么新页面会复用父页面的渲染进程( process-per-site-instance)**。</p>
+<p><strong>同一站点：</strong> <strong>根域名</strong>（例如，geekbang.org）加上<strong>协议</strong>（例如，https:// 或者 http://），还包含了该根域名下的所有子域名和不同的端口。</p>
+<p>如果新页面和当前页面不属于同一站点，浏览器会使用一个新的渲染进程。</p>
+<p>渲染进程准备好之后，还不能立即进入文档解析状态，因为此时的文档数据还在网络进程中，并没有提交给渲染进程，所以下一步就进入了提交文档阶段。</p>
+</li>
+<li><h4 id="提交文档"><a href="#提交文档" class="headerlink" title="提交文档"></a>提交文档</h4><p>提交文档是指浏览器进程将网络进程接收到的 HTML 数据提交给渲染进程。具体流程大概如下：</p>
+<p><strong>·</strong> 首先当浏览器进程接收到网络进程的响应头数据之后，便<strong>向渲染进程发起“提交文档”的消息</strong>；</p>
+<p><strong>·</strong> 渲染进程接收到“提交文档”的消息后，会和网络进程建立传输数据的“管道”;</p>
+<p><strong>·</strong> 等文档数据传输完成之后，渲染进程会返回“<strong>确认提交</strong>”的消息给浏览器进程；</p>
+<p><strong>·</strong> 浏览器进程在收到“确认提交”的消息后，会更新浏览器界面状态，包括了安全状态、地址栏的 URL、前进后退的历史状态，并更新           Web 页面。</p>
+<p>当渲染进程<strong>确认提交</strong>之后，更新的页面如下：</p>
+<img src="https://static001.geekbang.org/resource/image/d3/b8/d3c5a6188b09b5b57af439005ae7dfb8.png" alt="组件层级示例" style="zoom:50%;" /></li>
+</ol>
+<p>所以在浏览器的地址栏里面输入了一个地址后，之前的页面没有立马消失，而是要加载一会儿才会更新页面。</p>
+<ol start="5">
+<li><h4 id="渲染阶段"><a href="#渲染阶段" class="headerlink" title="渲染阶段"></a>渲染阶段</h4></li>
+</ol>
+<p>一旦文档被提交，渲染进程便开始页面解析和子资源加载，<strong>具体渲染流程比较复杂，之后再来进行总结</strong>。一旦页面生成完毕，渲染进程会发送一个消息给浏览器进程，浏览器接收到消息后，会停止标签图标上的加载动画。</p>
+]]></content>
+      <categories>
+        <category>浏览器</category>
+      </categories>
+      <tags>
+        <tag>浏览器基本原理</tag>
       </tags>
   </entry>
   <entry>
@@ -902,180 +1076,6 @@
       </categories>
       <tags>
         <tag>浏览器缓存</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git常用指令</title>
-    <url>/git/</url>
-    <content><![CDATA[<p>主要是记录git工作流程和归纳一下日常常用的git操作命令，防止遗忘。</p>
-<span id="more"></span>
-
-<p>git主要涉及到以下四个关键点：</p>
-<p>&emsp;&emsp;<strong>工作区</strong>：本地电脑存放项目文件的地方；</p>
-<p>&emsp;&emsp;<strong>暂存区（Index/Stage）</strong>：在使用git管理项目文件的时候，其本地的项目文件会多出一个.git的文件夹，将这个.git文件夹称之为版                                                    本库。其中.git文件夹中包含了两个部分，一个是暂存区（Index或者Stage）,顾名思义就是暂时存放文                                                    件的地方，通常使用add命令将工作区的文件添加到暂存区里；</p>
-<p>&emsp;&emsp;<strong>本地仓库：</strong>.git文件夹里还包括git自动创建的master分支，并且将HEAD指针指向master分支。使用commit命令可以将暂存区中                          的文件添加到本地仓库中；</p>
-<p>&emsp;&emsp;<strong>远程仓库：</strong>不是在本地仓库中，项目代码在远程git服务器上，比如项目放在github上，就是一个远程仓库，通常使用clone命令将                          远程仓库拷贝到本地仓库中，开发后推送到远程仓库中即可；</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/4/25/162fcc0e7e711dc7?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="git几个核心区域间的关系"></p>
-<p>所以其实git命令可以划分为以下：</p>
-<ol>
-<li><strong>git管理配置的命令；</strong></li>
-<li><strong>工作区与暂存区的交互；</strong></li>
-<li><strong>暂存区与本地仓库（分支）上的交互；</strong></li>
-<li><strong>本地仓库与远程仓库的交互。</strong></li>
-</ol>
-<p>&emsp;</p>
-<h2 id="git配置相关"><a href="#git配置相关" class="headerlink" title="git配置相关"></a>git配置相关</h2><ol>
-<li><strong>配置用户名和邮箱：</strong></li>
-</ol>
-<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.name</span> <span class="string">&quot;your name&quot;</span></span><br><span class="line">git <span class="keyword">config</span> --<span class="keyword">global</span> user<span class="variable">.email</span> <span class="string">&quot;youremail@github.com&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>&emsp;</p>
-<h2 id="工作区上的操作命令"><a href="#工作区上的操作命令" class="headerlink" title="工作区上的操作命令"></a>工作区上的操作命令</h2><h3 id="·-新建仓库"><a href="#·-新建仓库" class="headerlink" title="· 新建仓库"></a><strong>· 新建仓库</strong></h3><ol>
-<li><p>将工作区中的项目文件使用git进行管理，即创建一个新的本地仓库：</p>
-<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">init</span></span><br></pre></td></tr></table></figure></li>
-<li><p>从远程git仓库复制项目，克隆项目时如果想定义新的项目名，可以在指令后面指定：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git clone git:<span class="regexp">//gi</span>thub.com<span class="regexp">/wasd/</span>example.git mygit</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-提交"><a href="#·-提交" class="headerlink" title="· 提交"></a><strong>· 提交</strong></h3><ol>
-<li><p>提交工作区所有文件到暂存区</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> .</span><br></pre></td></tr></table></figure></li>
-<li><p>提交指定文件到暂存区</p>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">add</span> <span class="symbol">&lt;file1&gt;</span> <span class="symbol">&lt;file2&gt;</span> ...</span><br></pre></td></tr></table></figure></li>
-<li><p>提交工作区中某个文件夹中所有文件到暂存区</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">git <span class="builtin-name">add</span> [dir]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-撤销"><a href="#·-撤销" class="headerlink" title="· 撤销"></a><strong>· 撤销</strong></h3><ol>
-<li><p>删除工作区文件，并从暂存区删除对应文件的记录</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> rm &lt;file<span class="number">1</span>&gt; &lt;file<span class="number">2</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>从暂存区删除文件，但是工作区依然还有该文件</p>
-<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">rm</span> --cached &lt;<span class="keyword">file</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>取消暂存区已经暂存的文件</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">git <span class="meta">reset</span> HEAD &lt;<span class="meta">file</span>&gt;...</span><br></pre></td></tr></table></figure></li>
-<li><p>撤销上一次对文件的操作</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git checkout <span class="comment">--&lt;file&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>​    <em>要确定上一次对文件的修改不再需要，如果想保留上一次的修改以备以后继续工作，可以使用stashing和分支来处理</em></p>
-</li>
-</ol>
-<h3 id="·-更新文件"><a href="#·-更新文件" class="headerlink" title="· 更新文件"></a><strong>· 更新文件</strong></h3><ol>
-<li><p>重命名文件，并将已改名文件提交到暂存区</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git mv [<span class="built_in">file</span>-original] [<span class="built_in">file</span>-renamed]</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-查询状态"><a href="#·-查询状态" class="headerlink" title="· 查询状态"></a><strong>· 查询状态</strong></h3><ol>
-<li><p>查询当前工作区所有文件的状态</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git status</span></span><br></pre></td></tr></table></figure></li>
-<li><p>比较工作区中当前文件和暂存区之间的差异，也就是修改之后还没有暂存的内容(也可以指定文件)</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>&emsp;</p>
-<h2 id="暂存区上的操作命令"><a href="#暂存区上的操作命令" class="headerlink" title="暂存区上的操作命令"></a>暂存区上的操作命令</h2><h3 id="·-提交文件到版本库"><a href="#·-提交文件到版本库" class="headerlink" title="· 提交文件到版本库"></a><strong>· 提交文件到版本库</strong></h3><ol>
-<li><p>将暂存区中的文件提交到本地仓库，打上新版本</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> commit -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>将所有已经使用git管理过的文件暂存后一并提交，跳过add到暂存区的过程</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">git commit -<span class="keyword">a</span> -m <span class="string">&quot;commit_info&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>提交文件时，发现漏掉几个文件，或者注释写错了，可以撤销上一次提交</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">commit</span> <span class="comment">--amend</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-查看信息"><a href="#·-查看信息" class="headerlink" title="· 查看信息"></a><strong>· 查看信息</strong></h3><ol>
-<li><p>比较暂存区与上一版本的差异</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git diff &lt;<span class="built_in">file</span>-<span class="built_in">name</span>&gt; <span class="comment">--cached</span></span><br></pre></td></tr></table></figure></li>
-<li><p>查看提交历史，参数-p展开每次提交的历史差异，用-2显示最近的两次更新</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span> -p -<span class="number">2</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-打标签"><a href="#·-打标签" class="headerlink" title="· 打标签"></a><strong>· 打标签</strong></h3><p>​            有两种类型：<strong>轻量级的（lightweight）和含附注的（annotated）</strong>。轻量级标签就像是个不会变化的分支，实际上它就是个指向    特定提交对象的引用。而含附注标签，实际上是存储在仓库中的一个独立对象，它有自身的校验和信息，包含着标签的名字，电子邮件    地址和日期，以及标签说明，标签本身也允许使用 GNU Privacy Guard (GPG) 来签署或验证。一般建议使用含附注型的标签，以便保    留相关信息；当然，如果只是临时性加注标签，或者不需要旁注额外信息，用轻量级标签也行。</p>
-<ol>
-<li><p>列出现在所有的标签</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span></span><br></pre></td></tr></table></figure></li>
-<li><p>使用特定的搜索模式列出符合条件的标签，例如只对1.4.2系列的版本感兴趣</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-l</span> <span class="string">&quot;v1.4.2.*&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>创建一个含附注类型的标签，需要加<code>-a</code>参数</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">-a</span> v1.<span class="number">4</span> -m <span class="string">&quot;my version 1.4&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>使用git show命令查看相应标签的版本信息，并连同显示打标签时的提交对象</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> show v<span class="number">1</span>.<span class="number">4</span></span><br></pre></td></tr></table></figure></li>
-<li><p>创建一个轻量级标签的话，就直接使用git tag命令即可，连<code>-a</code>,<code>-s</code>以及<code>-m</code>选项都不需要，直接给出标签名字即可</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">tag</span> <span class="title">v1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
-<li><p>将标签推送到远程仓库中</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> push origin v<span class="number">1</span>.<span class="number">5</span></span><br></pre></td></tr></table></figure></li>
-<li><p>将本地所有的标签全部推送到远程仓库中</p>
-<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> --tags</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="·-分支管理"><a href="#·-分支管理" class="headerlink" title="· 分支管理"></a><strong>· 分支管理</strong></h3><ol>
-<li><p>创建分支</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>从当前所处的分支切换到其他分支</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>新建并切换到新建分支上</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>删除分支</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git branch -d &lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>将当前分支与指定分支进行合并</p>
-<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>显示本地仓库的所有分支</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch</span></span><br></pre></td></tr></table></figure></li>
-<li><p>查看各个分支最后一个提交对象的信息</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git branch -v</span></span><br></pre></td></tr></table></figure></li>
-<li><p>查看哪些分支已经合并到当前分支</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">git branch <span class="comment">--merged</span></span><br></pre></td></tr></table></figure></li>
-<li><p>查看当前哪些分支还没有合并到当前分支</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> branch --<span class="literal">no</span>-merged</span><br></pre></td></tr></table></figure></li>
-<li><p>把远程分支合并到当前分支</p>
-<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">merge</span> &lt;remote-<span class="keyword">name</span>&gt;/&lt;branch-<span class="keyword">name</span>&gt;</span><br></pre></td></tr></table></figure>
-
-<p>​        <em>如果是单线的历史分支不存在任何需要解决的分歧，只是简单的将HEAD指针前移，所以这种合并过程可以称为快进（Fast forward），而如果是历史分支是分叉的，会以当前分叉的两个分支作为两个祖先，创建新的提交对象；如果在合并分支时，遇到合并冲突需要人工解决后，再才能提交；</em><em><strong>(不是特别理解这段话的意思)</strong></em></p>
-</li>
-<li><p>在远程分支的基础上创建新的本地分支</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git checkout -b &lt;branch-<span class="built_in">name</span>&gt; &lt;remote-<span class="built_in">name</span>&gt;/&lt;branch-<span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>从远程分支checkout出来的本地分支，称之为跟踪分支。在跟踪分支上向远程分支上推送内容, 该命令会自动判断应该向远程仓库中的哪个分支推送数据.</p>
-<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">push</span></span><br></pre></td></tr></table></figure>
-
-<p>在跟踪分支上合并远程分支</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git pull</span></span><br></pre></td></tr></table></figure></li>
-<li><p>关于rebase的操作目前还不太理解，先不写在里面啦~</p>
-</li>
-</ol>
-<p>&emsp;</p>
-<h2 id="本地仓库上的操作"><a href="#本地仓库上的操作" class="headerlink" title="本地仓库上的操作"></a>本地仓库上的操作</h2><ol>
-<li><p>查看本地仓库关联的远程仓库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git remote</span></span><br></pre></td></tr></table></figure>
-
-<p><em>在克隆完每个远程仓库后，远程仓库默认为 orign，加上<code>-v</code>的参数后，会显示远程仓库的<code>url</code>地址；</em></p>
-</li>
-<li><p>添加远程仓库，一般会取一个简短的别名</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">git remote add example git:<span class="regexp">//gi</span>thub.com<span class="regexp">/example/</span>example.git</span><br></pre></td></tr></table></figure></li>
-<li><p>从远程仓库中抓取本地仓库中没有的更新</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git <span class="keyword">fetch</span> [remote-<span class="type">name</span>]</span><br></pre></td></tr></table></figure>
-
-<p><em>使用fetch只是将远端数据拉到本地仓库，并不自动合并到当前工作分支，只能人工合并。如果设置了某个分支关联到远程仓库的某个分支的话，可以使用<code>git pull</code>来拉去远程分支的数据，然后将远端分支自动合并到本地仓库中的当前分支；</em></p>
-</li>
-<li><p>将本地仓库某分支推送到远程仓库上</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">git push [remote-<span class="built_in">name</span>] [branch-<span class="built_in">name</span>]</span><br></pre></td></tr></table></figure>
-
-<p>如果想将本地分支推送到远程仓库的不同名分支</p>
-<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push &lt;remote-name&gt; &lt;local-branch&gt;<span class="symbol">:&lt;remote-branch&gt;</span></span><br><span class="line">如：</span><br><span class="line">git push origin <span class="symbol">serverfix:</span>awesomebranch</span><br></pre></td></tr></table></figure>
-
-<p>如果想删除远程分支</p>
-<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">git push [romote-name] <span class="symbol">:&lt;remote-branch&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><em>这里省略了本地分支，也就相当于将空白内容推送给远程分支，就等于删掉了远程分支。</em></p>
-</li>
-<li><p>查看远程仓库的详细信息</p>
-<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git remote <span class="built_in">show</span> <span class="built_in">origin</span></span><br></pre></td></tr></table></figure></li>
-<li><p>修改某个远程仓库在本地的简称</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">git remote <span class="keyword">rename</span> [<span class="built_in">old</span>-<span class="type">name</span>] [<span class="built_in">new</span>-<span class="type">name</span>]</span><br></pre></td></tr></table></figure></li>
-<li><p>移除远程仓库</p>
-<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> remote rm<span class="meta"> [remote-name]</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>&emsp;</p>
-<h2 id="忽略文件-gitignore"><a href="#忽略文件-gitignore" class="headerlink" title="忽略文件.gitignore"></a>忽略文件.gitignore</h2><p>​        一般会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。通常都是些自动生成的文件，比如日志文件，或者编译过程中创建的临时文件等。可以创建一个名为 .gitignore 的文件，列出要忽略的文件模式。</p>
-<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 此为注释 – 将被 Git 忽略</span></span><br><span class="line"><span class="comment"># 忽略所有 .a 结尾的文件</span></span><br><span class="line">*<span class="string">.a</span></span><br><span class="line"><span class="comment"># 但 lib.a 除外</span></span><br><span class="line">!lib.a</span><br><span class="line"><span class="comment"># 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO</span></span><br><span class="line"><span class="string">/TODO</span></span><br><span class="line"><span class="comment"># 忽略 build/ 目录下的所有文件</span></span><br><span class="line">build/</span><br><span class="line"><span class="comment"># 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt</span></span><br><span class="line">doc/*<span class="string">.txt</span></span><br><span class="line"><span class="comment"># 忽略 doc/ 目录下所有扩展名为 txt 的文件</span></span><br><span class="line">doc/**/*<span class="string">.txt</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>版本控制</category>
-      </categories>
-      <tags>
-        <tag>工具类</tag>
-        <tag>版本控制</tag>
       </tags>
   </entry>
 </search>

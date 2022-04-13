@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/kobe-icon2.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/kobe-icon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Zhi Mang Xing:300,300italic,400,400italic,700,700italic|Ma Shan Zheng:300,300italic,400,400italic,700,700italic|ZCOOL QingKe HuangYou:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kev1nzzzz.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文主要记录一下浏览器缓存相关知识，主要涉及知识点包括强缓存，协商缓存等，最后会简单理一下DNS流程和CDN缓存。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器缓存">
+<meta property="og:url" content="http://kev1nzzzz.github.io/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:site_name" content="KevinのBlog">
+<meta property="og:description" content="本文主要记录一下浏览器缓存相关知识，主要涉及知识点包括强缓存，协商缓存等，最后会简单理一下DNS流程和CDN缓存。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://segmentfault.com/img/bVJjuK">
+<meta property="og:image" content="https://segmentfault.com/img/bVJjuQ">
+<meta property="og:image" content="https://segmentfault.com/img/bVJjvF">
+<meta property="og:image" content="https://segmentfault.com/img/bVJjv8">
+<meta property="og:image" content="https://segmentfault.com/img/bVJjwd">
+<meta property="article:published_time" content="2022-03-13T13:20:22.000Z">
+<meta property="article:modified_time" content="2022-04-13T12:24:14.798Z">
+<meta property="article:author" content="Kevin&amp;33">
+<meta property="article:tag" content="浏览器缓存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://segmentfault.com/img/bVJjuK">
+
+<link rel="canonical" href="http://kev1nzzzz.github.io/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浏览器缓存 | KevinのBlog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<script type="text/javascript" src="\js\funny-title.js"></script>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/kev1nzzzz" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">KevinのBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description"><strong id="colortap1"></strong></p>
+      <script>
+        var colortap = function (r) {
+        	function t() {return b[Math.floor(Math.random() * b.length)]}  
+        	function e() {return String.fromCharCode(94 * Math.random() + 33)}
+        	function n(r) {
+        		for(var n=document.createDocumentFragment(),i=0;r>i;i++){
+        			var l=document.createElement("span");
+        			l.textContent=e(),l.style.color=t(),n.appendChild(l)
+        		}
+        		return n;
+        	}
+        	function i() {
+        		var t = o[c.skillI];
+        		c.step ? c.step-- : (c.step = g, c.prefixP < l.length ? (c.prefixP >= 0 && (c.text += l[c.prefixP]), c.prefixP++) : "forward" === c.direction ? c.skillP < t.length ? (c.text += t[c.skillP], c.skillP++) : c.delay ? c.delay-- : (c.direction = "backward", c.delay = a) : c.skillP > 0 ? (c.text = c.text.slice(0, -1), c.skillP--) : (c.skillI = (c.skillI + 1) % o.length, c.direction = "forward")), 
+        		r.textContent = c.text,
+        		r.appendChild(n(c.prefixP < l.length ? Math.min(s, s + c.prefixP) : Math.min(s, t.length - c.skillP))),
+        		setTimeout(i, d)
+        	}
+        	var l = "",
+        	o = ["要坚持下去","甘于淡泊，乐于寂寞","积跬步，至千里"].map(function (r) {return r + ""}),
+        	a = 2,g = 1,s = 5,d = 75,
+        	b = ["rgb(110,64,170)", "rgb(150,61,179)", "rgb(191,60,175)", "rgb(228,65,157)", "rgb(254,75,131)", "rgb(255,94,99)", "rgb(255,120,71)", "rgb(251,150,51)", "rgb(226,183,47)", "rgb(198,214,60)", "rgb(175,240,91)", "rgb(127,246,88)", "rgb(82,246,103)", "rgb(48,239,130)", "rgb(29,223,163)", "rgb(26,199,194)", "rgb(35,171,216)", "rgb(54,140,225)", "rgb(76,110,219)", "rgb(96,84,200)"],
+        	c = {text: "",prefixP: -s,skillI: 0,skillP: 0,direction: "forward",delay: a,step: g};i()
+        };
+        colortap(document.getElementById('colortap1'));
+      </script>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://kev1nzzzz.github.io/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpeg">
+      <meta itemprop="name" content="Kevin&33">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KevinのBlog">
+    </span>
+      <header class="post-header">
+      
+        <h1 class="post-title" itemprop="name headline">
+          浏览器缓存
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-13 21:20:22" itemprop="dateCreated datePublished" datetime="2022-03-13T21:20:22+08:00">2022-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-13 20:24:14" itemprop="dateModified" datetime="2022-04-13T20:24:14+08:00">2022-04-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/" itemprop="url" rel="index"><span itemprop="name">浏览器</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/%E7%BC%93%E5%AD%98%E6%89%8B%E6%AE%B5/" itemprop="url" rel="index"><span itemprop="name">缓存手段</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文主要记录一下浏览器缓存相关知识，主要涉及知识点包括强缓存，协商缓存等，最后会简单理一下DNS流程和CDN缓存。</p>
+<span id="more"></span>
+
+<h3 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h3><p>其实web缓存分为很多种，比如CDN缓存，DNS缓存，浏览器缓存等。本文主要是总结下浏览器缓存的相关细节。在真正发起网络请求之前，浏览器会先在浏览器缓存中查询是否有要请求的文件。所以<strong>浏览器缓存是一种在本地保存资源副本，以供下次请求时直接使用的技术</strong>。它会在本地使用的计算机中开辟一个内存区，同时也开辟一个硬盘区作为数据传输的缓冲区，然后用这个缓冲区来暂时保存用户以前访问过的信息。这样访问过的资源可以从浏览器缓存中拿出使用。通过减少服务器处理请求的数量，用户将获得更快的体验。</p>
+<p>浏览器缓存分为：<strong>强缓存，协商缓存。</strong></p>
+<h4 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h4><p>浏览器在加载资源时，会先根据本地缓存资源的 header 中的信息判断是否命中强缓存，如果命中则直接使用缓存中的资源不会再向服务器发送请求。</p>
+<p>这里的 header 中的信息指的是 <strong>expires 和 cache-control.</strong></p>
+<ol>
+<li><p><strong>Cache-Control:</strong></p>
+<p>Cache-Control包括：</p>
+<ul>
+<li>max-age</li>
+<li>s-maxage</li>
+<li>public</li>
+<li>private</li>
+<li>no-cache</li>
+<li>no-store</li>
+<li>must-revalidate</li>
+</ul>
+<p><strong><code>max-age</code>（单位为s）指定设置缓存最大的有效时间，定义的是时间长短</strong>。当浏览器向服务器发送请求后，在max-age这段时间里浏览器就不会再向服务器发送请求了。即使服务器上的资源发生了变化，浏览器也不会得到通知。</p>
+<p><strong><code>s-maxage</code>（单位为s）同max-age，只用于共享缓存（比如CDN缓存）。</strong><br>比如，当s-maxage=60时，在这60秒中，即使更新了CDN的内容，浏览器也不会进行请求。也就是说max-age用于普通缓存，而s-maxage用于代理缓存。如果存在s-maxage，则会覆盖掉max-age和Expires header。</p>
+<p><strong><code>public</code> 指定响应会被缓存，并且在多用户间共享</strong>。也就是下图的意思。如果没有指定public还是private，则默认为public。</p>
+<img src="https://segmentfault.com/img/bVJjuK" style="zoom:90%;" /></li>
+</ol>
+<p>​        <strong><code>private</code> 响应只作为私有的缓存，不能在用户间共享</strong>。如果要求HTTP认证，响应会自动设置为private。</p>
+<p>​        <strong><code>no-cache</code> 指定不缓存响应，表明资源不进行缓存</strong>。</p>
+<img src="https://segmentfault.com/img/bVJjuQ" style="zoom:90%;" />
+
+<p>​        但是设置了no-cache之后并不代表浏览器不缓存，而是在缓存前要向服务器确认资源是否被更改。因此有的时候只设置no-cache防止缓存还是不够保险，还可以加上private指令，将过期时间设为过去的时间。</p>
+<p>​        <strong><code>no-store</code> 绝对禁止缓存</strong>。每次请求资源都要从服务器重新获取。<br>​        <strong><code>must-revalidate</code>指定如果页面是过期的，则去服务器进行获取</strong>。这个指令并不常用，就不做过多的讨论了。</p>
+<ol start="2">
+<li><strong>Expires</strong></li>
+</ol>
+<p>​        缓存过期时间，用来指定资源到期的时间，是<strong>服务器端的具体的时间点</strong>。比cache-control优先级低。该字段是 <strong>http1.0</strong> 时的规范，它的值为一个<strong>绝对时间</strong>的 GMT 格式的时间字符串，比如 Expires:Mon,18 Oct 2066 23:59:59 GMT。这个时间代表着这个资源的失效时间，在此时间之前，即命中缓存。这种方式有一个明显的缺点，<strong>由于失效时间是一个绝对时间，所以当服务器与客户端时间偏差较大时，就会导致缓存混乱。</strong></p>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>当强缓存没有命中的时候，浏览器会发送一个请求到服务器，服务器根据 header 中的部分信息来判断是否命中缓存。如果命中，则返回 <strong>304</strong> ，告诉浏览器资源未更新，可使用本地的缓存。</p>
+<p>这里的 header 中的信息指的是<strong>Last-Modify/If-Modify-Since 和 ETag/If-None-Match。</strong></p>
+<ol>
+<li><strong>Last-modified</strong></li>
+</ol>
+<p>​    服务器端文件的最后修改时间，需要和<code>cache-control</code>共同使用，是检查服务器端资源是否更新的一种方式。当浏览器再次进行请求时，会向服务器传送<code>If-Modified-Since</code>报头，询问<code>Last-Modified</code>时间点之后资源是否被修改过。如果没有修改，则返回码为304，使用缓存；如果修改过，则再次去服务器请求资源，返回码和首次请求相同为200，资源为服务器最新资源。</p>
+<img src="https://segmentfault.com/img/bVJjvF"  style="zoom:90%;" />
+
+<ol start="2">
+<li><p><strong>ETag</strong></p>
+<p>根据实体内容生成一段hash字符串，标识资源的状态，由服务端产生。浏览器会将这串字符串传回服务器，验证资源是否已经修改，如果没有修改，过程如下：</p>
+<img src="https://segmentfault.com/img/bVJjv8" style="zoom:80%;" /></li>
+</ol>
+<p><strong>Last-modified和ETag比较</strong></p>
+<p>HTTP1.1中Etag的出现主要是为了解决几个Last-Modified比较难解决的问题：</p>
+<ol>
+<li>Last-Modified标注的最后修改只能精确到秒级，如果某些文件在1秒钟以内，被修改多次的话，它将不能准确标注文件的修改时间。</li>
+<li>如果某些文件会被定期生成，当有时内容并没有任何变化，但Last-Modified却改变了，导致文件没法使用缓存。</li>
+<li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
+</ol>
+<p>也就是说：</p>
+<ol>
+<li>Last-Modified是<strong>根据文件的修改时间</strong>作唯一标示，并且修改时间只能精确到秒级（同1s修改多次，无法生成新的Last-Modified）。</li>
+<li>Etag是<strong>根据资源内容</strong>在服务器端的唯一标识符，能够更加准确的控制缓存。</li>
+</ol>
+<p>Last-Modified与ETag是可以一起使用的，<strong>服务器会优先验证ETag</strong>，一致的情况下，才会继续比对Last-Modified，最后才决定是否返回304。</p>
+<h4 id="总结流程"><a href="#总结流程" class="headerlink" title="总结流程"></a>总结流程</h4><img src="https://segmentfault.com/img/bVJjwd"  style="zoom:90%;" />
+
+
+
+<h4 id="缓存实现方式"><a href="#缓存实现方式" class="headerlink" title="缓存实现方式"></a>缓存实现方式</h4><p><strong>方式一：客户端指定</strong></p>
+<ol>
+<li>request header 携带cache-control。</li>
+<li>服务端接收到 header cache-control字段，并且使用该字段设置response 的 cache-control。</li>
+<li>浏览器接收到response header,根据cache-control 设置缓存。</li>
+</ol>
+<p><strong>方法二：服务端指定</strong></p>
+<ol>
+<li>服务端接收到请求，设置response 的 cache-control并返回response。</li>
+<li>浏览器接收到response header,根据cache-control 设置缓存。</li>
+</ol>
+<h4 id="缓存的资源在哪里？"><a href="#缓存的资源在哪里？" class="headerlink" title="缓存的资源在哪里？"></a>缓存的资源在哪里？</h4><ol>
+<li><strong>memory cache</strong></li>
+</ol>
+<p>​    内存中的缓存，主要包含的是当前中页面中已经抓取到的资源，例如页面上已经下载的样式、脚本、图片等。读取内存中的数据肯定比磁盘快，内存缓存虽然读取高效，可是缓存持续性很短，会随着进程的释放而释放。一旦我们关闭 Tab 页面，内存中的缓存也就被释放了。</p>
+<ol start="2">
+<li><strong>Disk Cache</strong></li>
+</ol>
+<p>​    存储在硬盘中的缓存，读取速度慢点，但是什么都能存储到磁盘中，比之 Memory Cache 胜在容量和存储时效性上。</p>
+<p>​    在所有浏览器缓存中，Disk Cache 覆盖面基本是最大的。它会根据 HTTP Header 中的字段判断哪些资源需要缓存，哪些资源可以不请求直接使用，哪些资源已经过期需要重新请求。并且即使在跨站点的情况下，相同地址的资源一旦被硬盘缓存下来，就不会再次去请求数据。绝大部分的缓存都来自 Disk Cache。</p>
+<ol start="3">
+<li><strong>Service Worker</strong></li>
+</ol>
+<p>​    是运行在浏览器背后的独立线程，一般可以用来实现缓存功能。使用 Service Worker的话，传输协议必须为 HTTPS。因为 Service Worker 中涉及到请求拦截，所以必须使用 HTTPS 协议来保障安全。Service Worker 的缓存与浏览器其他内建的缓存机制不同，它可以让我们自由控制缓存哪些文件、如何匹配缓存、如何读取缓存，并且缓存是持续性的。</p>
+<ol start="4">
+<li><strong>prefetch cache(预取缓存)</strong></li>
+</ol>
+<p>​    link标签上带了prefetch，再次加载会出现。<code>prefetch</code> 在浏览器空闲时间下载或预取用户在不久的将来可能访问的文档，在当前的页面加载完成后预取资源放进缓存中，在之后的调用就直接从缓存中获取，从而提升性能。</p>
+<p>查找浏览器缓存时会按顺序查找: <strong>Service Worker–&gt;Memory Cache–&gt;Disk Cache–&gt;Push Cache。</strong></p>
+<h4 id="缓存方案"><a href="#缓存方案" class="headerlink" title="缓存方案"></a>缓存方案</h4><p>目前的项目大多使用这种缓存方案的：</p>
+<ul>
+<li>HTML: 协商缓存；</li>
+<li>css、js、图片：强缓存，文件名带上hash。</li>
+</ul>
+<h4 id="刷新对于强缓存和协商缓存的影响"><a href="#刷新对于强缓存和协商缓存的影响" class="headerlink" title="刷新对于强缓存和协商缓存的影响"></a>刷新对于强缓存和协商缓存的影响</h4><ol>
+<li><p>当ctrl+f5强制刷新网页时，直接从服务器加载，跳过强缓存和协商缓存。</p>
+</li>
+<li><p>当f5刷新网页时，跳过强缓存，但是会检查协商缓存。</p>
+</li>
+<li><p>浏览器地址栏中写入URL，回车 浏览器发现缓存中有这个文件了，不用继续请求了，直接去缓存拿。（最快）</p>
+</li>
+</ol>
+<h3 id="DNS缓存"><a href="#DNS缓存" class="headerlink" title="DNS缓存"></a>DNS缓存</h3><p>DNS解析：通过域名,最终得到该域名对应的IP地址的过程叫做域名解析（或主机名解析）。浏览器、操作系统、Local DNS、根域名服务器，它们都会对DNS结果做一定程度的缓存。</p>
+<p>DNS查询过程如下:</p>
+<ol>
+<li>首先搜索浏览器自身的DNS缓存,如果存在，则域名解析到此完成。</li>
+<li>如果浏览器自身的缓存里面没有找到对应的条目，那么会尝试读取操作系统的hosts文件看是否存在对应的映射关系,如果存在，则域名解析到此完成。</li>
+<li>如果本地hosts文件不存在映射关系，则查找本地DNS服务器(ISP服务器,或者自己手动设置的DNS服务器),如果存在,域名到此解析完成。</li>
+<li>如果本地DNS服务器还没找到的话,它就会向根服务器发出请求,进行递归查询。</li>
+</ol>
+<h3 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h3><p>cdn:即内容分发网络。看到过一个形象的比喻来理解CDN是什么。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10年前，还没有火车票代售点一说，12306.cn更是无从说起。那时候火车票还只能在火车站的售票大厅购买，而我所在的小县城并不通火车，火车票都要去市里的火车站购买，而从我家到县城再到市里，来回就是4个小时车程，简直就是浪费生命。后来就好了，小县城里出现了火车票代售点，甚至乡镇上也有了代售点，可以直接在代售点购买火车票，方便了不少，全市人民再也不用在一个点苦逼的排队买票了。</span><br></pre></td></tr></table></figure>
+
+<p>简单的理解CDN就是这些代售点(缓存服务器)的承包商,他为买票者提供了便利,帮助他们在最近的地方(最近的CDN节点)用最短的时间(最短的请求时间)买到票(拿到资源),这样去火车站售票大厅排队的人也就少了。也就减轻了售票大厅的压力(起到分流作用,减轻服务器负载压力)。</p>
+<p>用户在浏览网站的时候，CDN会选择一个离用户最近的CDN边缘节点来响应用户的请求，这样海南移动用户的请求就不会千里迢迢跑到北京电信机房的服务器（假设源站部署在北京电信机房）上了。</p>
+<p>关于CDN缓存,在浏览器本地缓存失效后,浏览器会向CDN边缘节点发起请求。类似浏览器缓存,CDN边缘节点也存在着一套缓存机制。CDN边缘节点缓存策略因服务商不同而不同，但一般都会遵循http标准协议，通过http响应头中的Cache-control: max-age的字段来设置CDN边缘节点数据缓存时间。</p>
+<p>当浏览器向CDN节点请求数据时，CDN节点会判断缓存数据是否过期，若缓存数据并没有过期，则直接将缓存数据返回给客户端；否则，CDN节点就会向服务器发出回源请求，从服务器拉取最新数据，更新本地缓存，并将最新数据返回给客户端。 CDN服务商一般会提供基于文件后缀、目录多个维度来指定CDN缓存时间，为用户提供更精细化的缓存管理。</p>
+
+    </div>
+
+    
+    
+    
+  
+    <div>
+      
+      <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/" rel="tag">
+                <i class="fa fa-tag">浏览器缓存</i>
+              </a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E4%BB%8E%E8%BE%93%E5%85%A5%20URL%20%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/" rel="prev" title="浏览器基本工作原理(二)">
+      <i class="fa fa-chevron-left"></i> 浏览器基本工作原理(二)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">浏览器缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">1.2.</span> <span class="nav-text">协商缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">总结流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">缓存实现方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%9A%84%E8%B5%84%E6%BA%90%E5%9C%A8%E5%93%AA%E9%87%8C%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">缓存的资源在哪里？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%96%B9%E6%A1%88"><span class="nav-number">1.6.</span> <span class="nav-text">缓存方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B7%E6%96%B0%E5%AF%B9%E4%BA%8E%E5%BC%BA%E7%BC%93%E5%AD%98%E5%92%8C%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.7.</span> <span class="nav-text">刷新对于强缓存和协商缓存的影响</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS%E7%BC%93%E5%AD%98"><span class="nav-number">2.</span> <span class="nav-text">DNS缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN%E7%BC%93%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">CDN缓存</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="/">
+      <img class="site-author-image" itemprop="image" alt="Kevin&33"
+        src="/images/kobe.jpeg">
+    </a>
+  <p class="site-author-name" itemprop="name">Kevin&33</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kev1nzzzz" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kev1nzzzz" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kevin&33</span>
+</div>
+<span id="sitetime" style=""></span>
+<script language=javascript>
+	function siteTime(){
+		window.setTimeout("siteTime()", 1000);
+		var seconds = 1000;
+		var minutes = seconds * 60;
+		var hours = minutes * 60;
+		var days = hours * 24;
+		var years = days * 365;
+		var today = new Date();
+		var todayYear = today.getFullYear();
+		var todayMonth = today.getMonth()+1;
+		var todayDate = today.getDate();
+		var todayHour = today.getHours();
+		var todayMinute = today.getMinutes();
+		var todaySecond = today.getSeconds();
+		/* 
+		Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+		year - 作为date对象的年份，为4位年份值
+		month - 0-11之间的整数，做为date对象的月份
+		day - 1-31之间的整数，做为date对象的天数
+		hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+		minutes - 0-59之间的整数，做为date对象的分钟数
+		seconds - 0-59之间的整数，做为date对象的秒数
+		microseconds - 0-999之间的整数，做为date对象的毫秒数
+        */
+		var t1 = Date.UTC(2020,06,13,15,00,00); //北京时间2018-2-13 00:00:00
+		var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+		var diff = t2-t1;
+		var diffYears = Math.floor(diff/years);
+		var diffDays = Math.floor((diff/days)-diffYears*365);
+		var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+		var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+		var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+		document.getElementById("sitetime").innerHTML="小破站已运行"+/*diffYears+" 年 "+*/diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+	}
+	siteTime();
+</script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://kev1nzzzz.github.io/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/',]
+      });
+      });
+  </script>
+
+  
+
+  <script async src="/js/cursor/fireworks.js"></script>
+
+
+
+
+
+<script src="/js/sakura.js"><\/script>
+
+<script src="/js/funny-title.js"><\/script>
+<script src="/js/cursor.js"><\/script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
